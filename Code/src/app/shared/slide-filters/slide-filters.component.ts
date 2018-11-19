@@ -17,7 +17,8 @@ export class SlideFiltersComponent implements OnInit {
   public countryList: Observable<ICountryListModel[]>;
   public countries: ICountryListModel[] = appConfig.countryList;
   public categoryFormControl: FormControl = new FormControl();
-  public categoriesList: ICategoryListInterface[] = [
+  public categoriesList: Observable<ICategoryListInterface[]>;
+  public categories: ICategoryListInterface[] = [
     {name: 'Film & Animation', id: 1},
     {name: 'Autos & Vehicles', id: 2},
     {name: 'Music', id: 10},
@@ -34,11 +35,17 @@ export class SlideFiltersComponent implements OnInit {
         map((country) => country ? this.filterCountries(country) : this.countries.slice())
       );
 
+    this.categoriesList = this.categoryFormControl.valueChanges
+      .pipe(
+        startWith(''),
+        map((category) => category ? this.filterCategories(category) : this.categories.slice())
+      );
+
     this.countryFormControl.valueChanges
       .subscribe((value) => {
         const country = appConfig.countryList.find((obj) => obj.name === value);
         if (country) {
-          const category = this.categoriesList.find((item) => item.name === this.categoryFormControl.value);
+          const category = this.categories.find((item) => item.name === this.categoryFormControl.value);
           const filterValues = {
             videosOnPage: this.videosOnPage,
             country: country.code,
@@ -50,7 +57,7 @@ export class SlideFiltersComponent implements OnInit {
 
     this.categoryFormControl.valueChanges
       .subscribe((value) => {
-        const category = this.categoriesList.find((item) => item.name === value);
+        const category = this.categories.find((item) => item.name === value);
         if (category) {
           const country = appConfig.countryList.find((item) => item.name === this.countryFormControl.value);
           const filterValues = {
@@ -79,6 +86,17 @@ export class SlideFiltersComponent implements OnInit {
   }
 
   /**
+   * Filter categories function
+   *
+   * @param {string} value
+   */
+  private filterCategories(value: string): ICategoryListInterface[] {
+    const filterValue = value.toLowerCase();
+    return this.categories.filter((category) =>
+      category.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  /**
    * On change videos per page function
    *
    * @param {number} count
@@ -94,7 +112,7 @@ export class SlideFiltersComponent implements OnInit {
   private setDefaults() {
     const defaultCountry = this.countries.find((country) =>
       country.code === appConfig.defaultRegion).name;
-    const defaultCategory = this.categoriesList.find((country) =>
+    const defaultCategory = this.categories.find((country) =>
       country.id === appConfig.defaultCategoryId).name;
     this.countryFormControl.setValue(defaultCountry);
     this.categoryFormControl.setValue(defaultCategory);
