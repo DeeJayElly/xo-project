@@ -21,7 +21,7 @@ Notes:
 
 Tasks:
 DONE - Implement country search and switch YouTube trends by selected country with autocomplete feature in slide-filters.component
-* Implement Category selection and show YouTube trends by selected category with autocomplete feature in slide-filters.component
+DONE - Implement Category selection and show YouTube trends by selected category with autocomplete feature in slide-filters.component
 * Implement Infinite scroll and append more videos to the bottom of the page
 DONE - Fix bug with likes count
 DONE - Fix bug with showing video on a separate page

@@ -8,16 +8,16 @@ export class ContextService {
   public videosCountPerPage: Subject<number> = new Subject<number>();
   public videoOpened = new Subject<boolean>();
   public videoOpened$ = this.videoOpened.asObservable();
-  public countrySelected = new Subject<string>();
-  public countrySelected$ = this.countrySelected.asObservable();
+  public newFilterValues: Subject<any> = new Subject<any>();
+  public newFilterValues$ = this.newFilterValues.asObservable();
 
   /**
-   * Check and emit if the country has been changed function
+   * Check and emit if the filters have been changed function
    *
-   * @param {string} country
+   * @param {any} newFilterValues
    */
-  public countrySelect(country: string) {
-    this.countrySelected.next(country);
+  public filtersUpdate(newFilterValues: any) {
+    this.newFilterValues.next(newFilterValues);
   }
 
   /**

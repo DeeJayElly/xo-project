@@ -25,9 +25,9 @@ export class YoutubeComponent implements OnInit {
     this.appContext.moduleTitle.next('YOUTUBE');
     this.loadVideos();
     this.appContext.videosCountPerPage.subscribe((count) => this.loadVideos(count));
-    this.appContext.countrySelected$.subscribe(
-      (country) => {
-        this.loadVideos(25, country);
+    this.appContext.newFilterValues$.subscribe(
+      (values) => {
+        this.loadVideos(values.videosOnPage, values.country, values.categoryId);
       });
   }
 
@@ -36,9 +36,10 @@ export class YoutubeComponent implements OnInit {
    *
    * @param {number} videosPerPage
    * @param {string} countryCode
+   * @param {number} categoryId
    */
-  private loadVideos(videosPerPage?: number, countryCode?: string) {
-    this.trendingVideos = this.youtubeService.getTrendingVideos(videosPerPage, countryCode)
+  private loadVideos(videosPerPage?: number, countryCode?: string, categoryId?: number) {
+    this.trendingVideos = this.youtubeService.getTrendingVideos(videosPerPage, countryCode, categoryId)
       .pipe(
         catchError((error: any) => {
           this.loadingError$.next(true);

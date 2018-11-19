@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {appConfig} from 'appConfig';
 import {ContextService} from '@shared/context.service';
-import {YoutubeService} from '@modules/youtube/service/youtube.service';
 
 @Component({
   selector: 'app-player',
@@ -14,8 +13,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   public videoLoader: boolean;
   public urlSafe: SafeResourceUrl;
 
-  constructor(public sanitizer: DomSanitizer, public contextService: ContextService,
-              public youtubeService: YoutubeService) {
+  constructor(public sanitizer: DomSanitizer, public contextService: ContextService) {
   }
 
   public ngOnInit() {
@@ -31,7 +29,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.videoLoader = true;
     this.embedUrl = appConfig.getYoutubeEmbdedUrl(id);
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.embedUrl);
-    // }
   }
 
   public ngOnDestroy() {

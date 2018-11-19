@@ -16,14 +16,15 @@ export class YoutubeService {
    *
    * @param {number} videosPerPage
    * @param {string} regionCode
+   * @param {number} categoryId
    *
    * @return {Observable<VideoClass[]>}
    */
-  public getTrendingVideos(videosPerPage?: number, regionCode?: string): Observable<VideoClass[]> {
+  public getTrendingVideos(videosPerPage?: number, regionCode?: string, categoryId?: number): Observable<VideoClass[]> {
     const params: any = {
       part: appConfig.partsToLoad,
       chart: appConfig.chart,
-      videoCategoryId: appConfig.defaultCategoryId,
+      videoCategoryId: categoryId ? categoryId : appConfig.defaultCategoryId,
       regionCode: regionCode ? regionCode : appConfig.defaultRegion,
       maxResults: videosPerPage ? videosPerPage : appConfig.maxVideosToLoad,
       key: appConfig.youtubeApiKey

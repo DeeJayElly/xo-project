@@ -25,6 +25,7 @@ export class SlideFiltersComponent implements OnInit {
   ];
 
   public defaultVideosOnPage: number = appConfig.maxVideosToLoad;
+  public videosOnPage: number = appConfig.maxVideosToLoad;
 
   constructor(private appContext: ContextService) {
     this.countryList = this.countryFormControl.valueChanges
@@ -37,7 +38,27 @@ export class SlideFiltersComponent implements OnInit {
       .subscribe((value) => {
         const country = appConfig.countryList.find((obj) => obj.name === value);
         if (country) {
-          this.appContext.countrySelect(country.code);
+          const category = this.categoriesList.find((item) => item.name === this.categoryFormControl.value);
+          const filterValues = {
+            videosOnPage: this.videosOnPage,
+            country: country.code,
+            categoryId: (category && category.id) ? category.id : null
+          };
+          this.appContext.filtersUpdate(filterValues);
+        }
+      });
+
+    this.categoryFormControl.valueChanges
+      .subscribe((value) => {
+        const category = this.categoriesList.find((item) => item.name === value);
+        if (category) {
+          const country = appConfig.countryList.find((item) => item.name === this.countryFormControl.value);
+          const filterValues = {
+            videosOnPage: this.videosOnPage,
+            country: country.code,
+            categoryId: category.id
+          };
+          this.appContext.filtersUpdate(filterValues);
         }
       });
   }
@@ -63,6 +84,7 @@ export class SlideFiltersComponent implements OnInit {
    * @param {number} count
    */
   public onChangeVideosPerPage(count: number) {
+    this.videosOnPage = count;
     this.appContext.videosCountPerPage.next(count);
   }
 
