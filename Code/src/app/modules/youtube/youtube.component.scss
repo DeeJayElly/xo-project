@@ -18,6 +18,8 @@
     display: flex;
     justify-content: stretch;
     flex-wrap: wrap;
+    overflow: auto;
+    height: 100%;
   }
 
   .card-container {

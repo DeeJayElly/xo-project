@@ -22,6 +22,8 @@ import {AppComponent} from './app.component';
 import {ContextService} from '@shared/context.service';
 import {HeaderComponent} from '@shared/header/header.component';
 import {SlideFiltersComponent} from '@shared/slide-filters/slide-filters.component';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {WebStorageModule} from 'ngx-store';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import {SlideFiltersComponent} from '@shared/slide-filters/slide-filters.compone
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatButtonModule,
+    WebStorageModule,
+    InfiniteScrollModule,
     MatIconModule,
     MatInputModule,
     MatSidenavModule,

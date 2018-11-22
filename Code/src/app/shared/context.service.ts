@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
+import {SessionStorage} from 'ngx-store';
 
 @Injectable()
 export class ContextService {
@@ -10,6 +11,8 @@ export class ContextService {
   public videoOpened$ = this.videoOpened.asObservable();
   public newFilterValues: Subject<any> = new Subject<any>();
   public newFilterValues$ = this.newFilterValues.asObservable();
+  public newPageScroll$: Subject<number> = new Subject<number>();
+  @SessionStorage() _storedFilters: any = {} as any;
 
   /**
    * Check and emit if the filters have been changed function
@@ -34,5 +37,34 @@ export class ContextService {
    */
   public isSideFiltersButtonVisible() {
     return (window.location.pathname.slice(8, 10) === '');
+  }
+
+  /**
+   * request to add new video content to video list
+   * @param count
+   */
+  public requestScroll(count: number) {
+    this.newPageScroll$.next(count);
+  }
+
+  /**
+   * Get stored filters function
+   *
+   * @return {any}
+   */
+  get storedFilters() {
+    return this._storedFilters;
+  }
+
+  /**
+   * Set filters function
+   *
+   * @param value
+   */
+  set storedFilters(value: any) {
+    if (value && value.categoryFormControl) {
+      this._storedFilters = value;
+
+    }
   }
 }

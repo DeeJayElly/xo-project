@@ -12,7 +12,7 @@ DONE - When slide-nav is opened, the close button is also didn't work, fix it al
 On filters slide-nav, we have "Count of videos on the page" slider and when we trying to select more than 50 videos it shows error, please fix it.
 DONE - When we open the video on a separate page, filters button should be hidden.
 In case if passed wrong video id, the user should be redirected on a page with youtube videos list.
-Selected filters should be saved, so after we will refresh the page, filters should be the same as we chose before.
+DONE - Selected filters should be saved, so after we will refresh the page, filters should be the same as we chose before.
 
 Notes:
 * List of countries can be found in the app.config file
@@ -22,7 +22,7 @@ Notes:
 Tasks:
 DONE - Implement country search and switch YouTube trends by selected country with autocomplete feature in slide-filters.component
 DONE - Implement Category selection and show YouTube trends by selected category with autocomplete feature in slide-filters.component
-* Implement Infinite scroll and append more videos to the bottom of the page
+DONE - Implement Infinite scroll and append more videos to the bottom of the page
 DONE - Fix bug with likes count
 DONE - Fix bug with showing video on a separate page
 DONE - Fix bug with opening filter navigation slide
@@ -30,7 +30,7 @@ DONE - Fix bug with closing filter navigation slide
 * Fix bug with selecting count of videos on the page when it's more than 50 videos
 DONE - Filters button should be hidden when opened video page
 * In case if passed wrong video id, the user should be redirected on a page with youtube videos list
-* Filters should be the same as selected before on page refresh
+DONE - Filters should be the same as selected before on page refresh
 * Unit tests coverage should be not less than 70%, higher -> better
 
 PLEASE NOTE THAT ALL THE TASKS LISTED ABOVE ARE MANDATORY. We'll be evaluating your submission from the following perspectives:

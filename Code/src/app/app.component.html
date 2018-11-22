@@ -7,7 +7,13 @@
     <app-slide-filters></app-slide-filters>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content
+    class="search-results"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    [scrollWindow]="false"
+    (scrolled)="onScroll()">
     <app-page-header></app-page-header>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

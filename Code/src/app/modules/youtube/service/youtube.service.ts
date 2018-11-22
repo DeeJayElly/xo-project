@@ -1,26 +1,27 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {map, catchError} from 'rxjs/internal/operators';
+import {map, catchError, tap} from 'rxjs/internal/operators';
+import 'rxjs/add/operator/concatMap';
 import {appConfig} from 'appConfig';
 import {VideoClass} from '../models/video.class';
 
 @Injectable()
 export class YoutubeService {
+  private nextToken: string;
 
   constructor(private http: HttpClient) {
   }
 
   /**
    * Get trending videos function
-   *
-   * @param {number} videosPerPage
-   * @param {string} regionCode
-   * @param {number} categoryId
-   *
-   * @return {Observable<VideoClass[]>}
+   * @param videosPerPage
+   * @param regionCode
+   * @param categoryId
+   * @param paginate
+   * @returns {Observable<VideoClass[]>}
    */
-  public getTrendingVideos(videosPerPage?: number, regionCode?: string, categoryId?: number): Observable<VideoClass[]> {
+  public getTrendingVideos(videosPerPage?: number, regionCode?: string, categoryId?: number, paginate?: boolean): Observable<VideoClass[]> {
     const params: any = {
       part: appConfig.partsToLoad,
       chart: appConfig.chart,
@@ -30,8 +31,14 @@ export class YoutubeService {
       key: appConfig.youtubeApiKey
     };
 
+    if (paginate) {
+      params.pageToken = this.nextToken;
+    }
+
     return this.http.get<any>(appConfig.getYoutubeEndPoint('videos'), {params})
-      .pipe(
+      .pipe(tap((data) => {
+          this.nextToken = data.nextPageToken;
+        }),
         map(
           (data) => data.items
             .map((item) => new VideoClass(item))
@@ -39,6 +46,7 @@ export class YoutubeService {
         ),
         catchError(this.handleError('getTrendingVideos'))
       ) as Observable<VideoClass[]>;
+
   }
 
   /**

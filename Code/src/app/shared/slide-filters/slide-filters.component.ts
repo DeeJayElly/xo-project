@@ -18,6 +18,7 @@ export class SlideFiltersComponent implements OnInit {
   public countries: ICountryListModel[] = appConfig.countryList;
   public categoryFormControl: FormControl = new FormControl();
   public categoriesList: Observable<ICategoryListInterface[]>;
+  private slideFilterStorage: any = {} as any;
   public categories: ICategoryListInterface[] = [
     {name: 'Film & Animation', id: 1},
     {name: 'Autos & Vehicles', id: 2},
@@ -45,12 +46,14 @@ export class SlideFiltersComponent implements OnInit {
       .subscribe((value) => {
         const country = appConfig.countryList.find((obj) => obj.name === value);
         if (country) {
+
           const category = this.categories.find((item) => item.name === this.categoryFormControl.value);
           const filterValues = {
             videosOnPage: this.videosOnPage,
             country: country.code,
             categoryId: (category && category.id) ? category.id : null
           };
+          this.updateStorage(filterValues);
           this.appContext.filtersUpdate(filterValues);
         }
       });
@@ -65,6 +68,7 @@ export class SlideFiltersComponent implements OnInit {
             country: country.code,
             categoryId: category.id
           };
+          this.updateStorage(filterValues);
           this.appContext.filtersUpdate(filterValues);
         }
       });
@@ -72,6 +76,18 @@ export class SlideFiltersComponent implements OnInit {
 
   public ngOnInit() {
     this.setDefaults();
+  }
+
+  /**
+   * Update storage function
+   *
+   * @param filterValues
+   */
+  private updateStorage(filterValues) {
+    this.slideFilterStorage.countryFormControl = this.countryFormControl.value;
+    this.slideFilterStorage.categoryFormControl = this.categoryFormControl.value;
+    this.slideFilterStorage.filtersValue = filterValues;
+    this.appContext.storedFilters = this.slideFilterStorage;
   }
 
   /**
@@ -110,12 +126,19 @@ export class SlideFiltersComponent implements OnInit {
    * Set defaults function
    */
   private setDefaults() {
-    const defaultCountry = this.countries.find((country) =>
-      country.code === appConfig.defaultRegion).name;
-    const defaultCategory = this.categories.find((country) =>
-      country.id === appConfig.defaultCategoryId).name;
-    this.countryFormControl.setValue(defaultCountry);
-    this.categoryFormControl.setValue(defaultCategory);
+    if (this.appContext.storedFilters && this.appContext.storedFilters.countryFormControl) {
+      this.videosOnPage = this.appContext.storedFilters.filtersValue.videosOnPage;
+      this.defaultVideosOnPage = this.appContext.storedFilters.filtersValue.videosOnPage;
+      this.countryFormControl.setValue(this.appContext.storedFilters.countryFormControl);
+      this.categoryFormControl.setValue(this.appContext.storedFilters.categoryFormControl);
+    } else {
+      const defaultCountry = this.countries.find((country) =>
+        country.code === appConfig.defaultRegion).name;
+      const defaultCategory = this.categories.find((country) =>
+        country.id === appConfig.defaultCategoryId).name;
+      this.countryFormControl.setValue(defaultCountry);
+      this.categoryFormControl.setValue(defaultCategory);
+    }
   }
 
   /**
